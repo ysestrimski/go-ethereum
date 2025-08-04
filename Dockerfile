@@ -9,7 +9,6 @@ FROM hexpm/elixir:1.17.0-erlang-27.0-alpine-3.19.1 AS blockscout-builder
 
 RUN apk add --no-cache build-base git curl postgresql-dev inotify-tools npm gcompat bash
 
-# Clone Blockscout source
 RUN git clone https://github.com/blockscout/blockscout.git /blockscout
 
 WORKDIR /blockscout
@@ -19,12 +18,8 @@ RUN mix local.hex --force && \
     mix deps.get && \
     mix compile
 
-#RUN mix do ecto.create, ecto.migrate
-
 RUN mix phx.digest && MIX_ENV=prod mix release
 
-#RUN cp config/config_helper.exs _build/prod/rel/blockscout/releases/$(ls _build/prod/rel/blockscout/releases)/config_helper.exs - not working
-#RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -type d | head -n 1)/
 RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -maxdepth 1 -mindepth 1 -type d)/config_helper.exs
 
 # Build Geth in a stock Go builder container
