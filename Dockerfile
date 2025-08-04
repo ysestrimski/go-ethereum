@@ -41,7 +41,6 @@ RUN apk add --no-cache ca-certificates libstdc++ postgresql-client su-exec bash 
 
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 COPY --from=blockscout-builder /blockscout/_build/prod /blockscout/_build/prod
-COPY --from=blockscout-builder /blockscout/priv/static /blockscout/priv/static
 COPY --from=blockscout-builder /blockscout /blockscout
 
 COPY start.sh /start.sh
