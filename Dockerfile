@@ -6,7 +6,7 @@ ARG BUILDNUM=""
 # Blockscout build stage
 FROM hexpm/elixir:1.17.0-erlang-27.0-alpine-3.19.1 AS blockscout-builder
 
-RUN apk add --no-cache build-base git curl postgresql-dev inotify-tools npm gcompat bash
+RUN apk add --no-cache build-base git curl postgresql-dev inotify-tools npm nodejs gcompat bash
 
 RUN git clone https://github.com/blockscout/blockscout.git /blockscout
 
@@ -17,6 +17,11 @@ RUN mix local.hex --force && \
     mix deps.get && \
     mix compile
 
+WORKDIR /blockscout/assets
+RUN npm install
+RUN npm run deploy
+
+WORKDIR /blockscout
 RUN mix phx.digest && MIX_ENV=prod mix release
 
 RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -maxdepth 1 -mindepth 1 -type d)/config_helper.exs
