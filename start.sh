@@ -15,7 +15,7 @@ geth --dev \
   --allow-insecure-unlock --mine --nodiscover &
 
 # Set environment variables for Blockscout
-export DATABASE_URL="postgresql://postgres:postgres@${DB_HOST:-localhost}:${DB_PORT:-5432}/blockscout"
+export DATABASE_URL="postgresql://postgres:postgres@${DB_HOST:-localhost}:${DB_PORT:-5432}/blockscout?ssl=false"
 export ETHEREUM_JSONRPC_HTTP_URL="http://localhost:8545"
 export PORT=4000
 export MIX_ENV=prod
