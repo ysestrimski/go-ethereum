@@ -21,6 +21,9 @@ RUN mix phx.digest && MIX_ENV=prod mix release
 
 RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -maxdepth 1 -mindepth 1 -type d)/config_helper.exs
 
+COPY --from=blockscout-builder /blockscout/_build/prod /blockscout/_build/prod
+COPY --from=blockscout-builder /blockscout/priv/static /blockscout/priv/static
+
 # Geth build stage
 FROM golang:1.24-alpine AS builder
 
@@ -39,6 +42,8 @@ FROM hexpm/elixir:1.17.0-erlang-27.0-alpine-3.19.1
 RUN apk add --no-cache ca-certificates libstdc++ postgresql-client su-exec bash curl
 
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
+COPY --from=blockscout-builder /blockscout/_build/prod /blockscout/_build/prod
+COPY --from=blockscout-builder /blockscout/priv/static /blockscout/priv/static
 COPY --from=blockscout-builder /blockscout /blockscout
 
 COPY start.sh /start.sh
