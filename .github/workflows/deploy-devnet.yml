@@ -114,19 +114,19 @@ jobs:
             /bin/sh /start.sh
           sleep 20
 
-      - name: Check Blockscout Explorer
-        run: |
-          echo "Waiting for Blockscout..."
-          for i in {1..30}; do
-              if curl -s http://localhost:4000 | grep -qi "blockscout"; then
-                echo "✅ Blockscout UI is up!"
-                exit 0
-              fi
-              sleep 5
-          done
-          echo "❌ Blockscout did not respond."
-          docker logs test-node
-          exit 0
+      # - name: Check Blockscout Explorer
+      #   run: |
+      #     echo "Waiting for Blockscout..."
+      #     for i in {1..30}; do
+      #         if curl -s http://localhost:4000 | grep -qi "blockscout"; then
+      #           echo "✅ Blockscout UI is up!"
+      #           exit 0
+      #         fi
+      #         sleep 5
+      #     done
+      #     echo "❌ Blockscout did not respond."
+      #     docker logs test-node
+      #     exit 0
 
       - name: Run Hardhat tests
         working-directory: ./hardhat

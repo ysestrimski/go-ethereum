@@ -1,9 +1,27 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:13
+    container_name: blockscout-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blockscout
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
   geth-node:
     image: yohands/my_first_container
     container_name: geth-devnet
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "8545:8545"
       - "8546:8546"
@@ -11,6 +29,8 @@ services:
       - "4000:4000"
     volumes:
       - geth-data:/root/.ethereum
+    depends_on:
+      - postgres
     restart: unless-stopped
     command: ["/bin/sh", "/start.sh"]
 
