@@ -17,7 +17,7 @@ RUN mix local.hex --force && \
     mix deps.get && \
     mix compile
 
-WORKDIR /blockscout/assets
+WORKDIR /blockscout/apps/block_scout_web/assets
 RUN npm install || (cat /root/.npm/_logs/* && exit 1)
 RUN npm run deploy
 
