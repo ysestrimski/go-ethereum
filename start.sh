@@ -10,7 +10,7 @@ done
 # Start Geth
 geth --dev \
   --http --http.addr 0.0.0.0 \
-  --http.vhosts "*" --http.api eth,net,web3,personal \
+  --http.vhosts "*" --http.api eth,net,web3,personal,txpool \
   --ws --ws.addr 0.0.0.0 \
   --allow-insecure-unlock --mine --nodiscover &
 
