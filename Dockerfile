@@ -24,7 +24,8 @@ RUN mix local.hex --force && \
 RUN mix phx.digest && MIX_ENV=prod mix release
 
 #RUN cp config/config_helper.exs _build/prod/rel/blockscout/releases/$(ls _build/prod/rel/blockscout/releases)/config_helper.exs - not working
-RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -type d | head -n 1)/
+#RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -type d | head -n 1)/
+RUN cp config/config_helper.exs $(find _build/prod/rel/blockscout/releases -maxdepth 1 -mindepth 1 -type d)/config_helper.exs
 
 # Build Geth in a stock Go builder container
 FROM golang:1.24-alpine AS builder
