@@ -1,11 +1,11 @@
 name: Build Docker Image for migrating DB
 
 on:
-    workflow_dispatch:
-    pull_request:
-        types: [closed]
-        branches:
-            - master
+  workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
 
 jobs:
     build:
