@@ -29,7 +29,7 @@ jobs:
 
       - name: Tag blockscout-builder image with commit
         run: |
-          docker tag yohands/blockscout-builder:latest yohands/blockscout-builder:${{ env.COMMIT_SHA }}
+          docker tag yohands/blockscout-builder:latest yohands/blockscout-builder:${{ env.SHORT_SHA }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -40,4 +40,4 @@ jobs:
       - name: Push blockscout-builder image
         run: |
           docker push yohands/blockscout-builder:latest
-          docker push yohands/blockscout-builder:${{ env.COMMIT_SHA }}
+          docker push yohands/blockscout-builder:${{ env.SHORT_SHA }}
