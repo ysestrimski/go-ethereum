@@ -1,0 +1,43 @@
+name: Build Docker Image for migrating DB
+
+on:
+    workflow_dispatch:
+    pull_request:
+        types: [closed]
+        branches:
+            - master
+
+jobs:
+    build:
+        if: (github.event_name == 'workflow_dispatch')
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Get short commit SHA
+              id: vars
+              run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+            - name: Build blockscout-builder image
+              run: |
+                docker build --target blockscout-builder -t yohands/blockscout-builder:latest .
+
+            - name: Tag blockscout-builder image with commit
+              run: |
+                docker tag yohands/blockscout-builder:latest yohands/blockscout-builder:${{ env.COMMIT_SHA }}
+
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Push blockscout-builder image
+              run: |
+                docker push yohands/blockscout-builder:latest
+                docker push yohands/blockscout-builder:${{ env.COMMIT_SHA }}  
